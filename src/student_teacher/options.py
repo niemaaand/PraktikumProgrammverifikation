@@ -3,7 +3,7 @@ class OptionsInformation:
                  batch_size=128,
                  criterion="CrossEntropyLoss",
                  device="cpu",
-                 lr=0.03,
+                 lr=0.035,
                  lr_momentum=0,
                  n_epochs=20,
                  optimizer="sgd",
