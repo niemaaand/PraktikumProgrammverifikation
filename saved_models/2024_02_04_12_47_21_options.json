@@ -1,0 +1,31 @@
+{
+    "batch_size": 128,
+    "n_batches": 200,
+    "n_batches_validation": 10,
+    "criterion": "MSELoss",
+    "device": "cpu",
+    "lr": 0.005,
+    "lr_momentum": 0,
+    "n_epochs": 20,
+    "optimizer": "adam",
+    "reload_model_path": "",
+    "scheduler": "StepLR",
+    "scheduler_lr_gamma": 0.85,
+    "scheduler_step": 2,
+    "student_model": "minst_fc_784_256_10",
+    "teacher_path": "C:\\Code\\KIT\\vnncomp2022_benchmarks\\benchmarks\\mnist_fc\\onnx\\mnist-net_256x2.onnx",
+    "saving_threshold": 0.8,
+    "dataset": {
+        "_name_": "MNIST",
+        "_value_": 1
+    },
+    "average_type_in_metrics": "micro",
+    "vnnlibs_path": "",
+    "soft_target_loss_weight": 0.0,
+    "ce_loss_weight": 1.0,
+    "T": 20,
+    "adapt_T": true,
+    "adapt_T_steps": 2,
+    "force_save": true,
+    "choose_best_model_based_on_teacher": false
+}
