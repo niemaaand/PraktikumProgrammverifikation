@@ -10,6 +10,8 @@ def build_optimizer(options: OptionsInformation, model: nn.Module):
 
     if options.optimizer == "sgd":
         optimizer = torch.optim.SGD(params, lr=options.lr, momentum=options.lr_momentum)
+    if options.optimizer == "adam":
+        optimizer = torch.optim.Adam(params, lr=options.lr)
     else:
         raise NotImplementedError
 
@@ -31,6 +33,10 @@ def build_criterion(options: OptionsInformation, device=None):
 
     if options.criterion == "CrossEntropyLoss":
         criterion = nn.CrossEntropyLoss().to(nn_utils.select_device(device))
+    elif options.criterion == "MSELoss":
+        criterion = nn.MSELoss().to(nn_utils.select_device(device))
+    elif options.criterion == "BCEWithLogitsLoss":
+        criterion = nn.BCEWithLogitsLoss().to(nn_utils.select_device(device))
     else:
         raise NotImplementedError
 

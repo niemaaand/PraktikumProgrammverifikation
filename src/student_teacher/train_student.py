@@ -8,6 +8,7 @@ from onnx2pytorch import ConvertModel
 from src.student_teacher import model_factory
 from src.student_teacher.options import OptionsInformation
 from src.student_teacher.trainer import StudentTrainer
+from src.utils.onnx_utils import export_model_to_onnx
 
 
 def load_teacher(path_to_onnx_model) -> nn.Module:
@@ -22,30 +23,11 @@ def build_student(options: OptionsInformation) -> nn.Module:
 
 
 def train_student(student_model: nn.Module, teacher_model: nn.Module, options: OptionsInformation) -> (nn.Module, str):
-    trainer = StudentTrainer(student_model, teacher_model, options)
+    trainer = StudentTrainer(student_model, teacher_model, options, vnnlibs_path=options.vnnlibs_path)
     trainer.train_model()
     best_student, best_student_path = trainer.get_best_student()
 
     return best_student, best_student_path
-
-
-def save_student():
-    pass
-
-
-def export_model_to_onnx(model: nn.Module, file_path):
-
-    file_path = os.path.abspath(file_path)
-
-    if not os.path.exists(os.path.dirname(file_path)):
-        os.makedirs(os.path.dirname(file_path))
-
-    torch_input = torch.randn(1, 1, 28, 28)
-    torch.onnx.export(model, torch_input, file_path, verbose=True)
-    #onnx_program.save(file_path)
-
-    onnx_model = onnx.load(file_path)
-    onnx.checker.check_model(onnx_model)
 
 
 def load_model(options: OptionsInformation, state_dict_path: str):
@@ -63,7 +45,10 @@ def load_model(options: OptionsInformation, state_dict_path: str):
 def create_student(teacher_model: nn.Module, options: OptionsInformation) -> nn.Module:
     student_model = build_student(options)
     best_student_model, best_student_path = train_student(student_model, teacher_model, options)
-    onnx_path = os.path.abspath("onnx/{}.onnx".format(os.path.basename(os.path.splitext(best_student_path)[0])))
-    export_model_to_onnx(best_student_model, onnx_path)
+    if best_student_path:
+        onnx_path = os.path.abspath("onnx/{}.onnx".format(os.path.basename(os.path.splitext(best_student_path)[0])))
+        export_model_to_onnx(best_student_model, onnx_path)
+    else:
+        print("Models to bad - no model saved.")
 
     pass
